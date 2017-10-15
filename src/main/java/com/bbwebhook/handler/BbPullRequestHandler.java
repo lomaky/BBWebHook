@@ -12,19 +12,19 @@ import com.bbwebhook.models.BBWebHookData;
 /**
  * Handler for requests to Lambda function.
  */
-public class BbPullRequestHandler implements RequestHandler<BBWebHookData, Object> {
+public class BbPullRequestHandler implements RequestHandler<Object, Object> {
 
 	@Override
-    public Object handleRequest( BBWebHookData input, Context context) {
+    public Object handleRequest(Object input, Context context) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
 		try {
 			return new GatewayResponse(
-	        		"{ \"Output\": \""+input.getPullrequest().getTitle()+"\"}",
+	        		"{ \"Output OK\": \""+input+"\"}",
 	        		headers, 200);
 		}catch (Exception e) {
 			return new GatewayResponse(
-	        		"{ \"Output\": \""+e.getMessage()+"\"}",
+	        		"{ \"Output FAIL\": \""+e.getMessage()+"\"}",
 	        		headers, 200);
 		}
     }
