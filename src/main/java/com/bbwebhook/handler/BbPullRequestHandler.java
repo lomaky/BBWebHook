@@ -7,15 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.bbwebhook.GatewayResponse;
+import com.bbwebhook.models.BBWebHookData;
 
 /**
  * Handler for requests to Lambda function.
  */
-public class BbPullRequestHandler implements RequestHandler<Object, Object> {
+public class BbPullRequestHandler implements RequestHandler<BBWebHookData, Object> {
 
-    public Object handleRequest(final Object input, final Context context) {
+	@Override
+    public Object handleRequest(final BBWebHookData input, final Context context) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        return new GatewayResponse("OK", headers, 200);
+        
+        return new GatewayResponse(input.getPullrequest().getTitle() , headers, 200);
     }
+
 }
