@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.bbwebhook.GatewayResponse;
 import com.bbwebhook.models.BBWebHookData;
+import com.google.gson.Gson;
 
 /**
  * Handler for requests to Lambda function.
@@ -19,13 +20,17 @@ public class BbPullRequestHandler implements RequestHandler<Object, Object> {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
 		try {
+			HashMap<String, String> mapInput = (HashMap<String, String>) input;
+			String body = mapInput.get("body");
+			Gson g = new Gson(); 
+			BBWebHookData bbWebHookData = g.fromJson(body, BBWebHookData.class);
 			return new GatewayResponse(
-	        		"{ \"Output OK\": \""+input+"\"}",
-	        		headers, 200);
+	        		"{ \"Output\": \""+bbWebHookData.getPullrequest().getTitle()+"\"}",
+	        		headers, 401);
 		}catch (Exception e) {
 			return new GatewayResponse(
 	        		"{ \"Output FAIL\": \""+e.getMessage()+"\"}",
-	        		headers, 200);
+	        		headers, 401);
 		}
     }
 
