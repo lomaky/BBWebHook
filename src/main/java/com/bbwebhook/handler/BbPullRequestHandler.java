@@ -29,7 +29,8 @@ public class BbPullRequestHandler implements RequestHandler<Object, Object> {
 			Gson g = new Gson(); 
 			BBWebHookData bbWebHookData = g.fromJson(body, BBWebHookData.class);
 			
-			AmazonSNS sns = AmazonSNSClient.builder().build();
+			AmazonSNS sns = AmazonSNSClient.builder().withRegion("us-east-1")
+					.build();
 			sns.publish(
 					new PublishRequest("arn:aws:sns:us-east-1:257530247365:GSBBAlarm",
 						body, 
