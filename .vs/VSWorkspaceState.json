@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\main",
+    "\\src\\main\\java",
+    "\\src\\main\\java\\com",
+    "\\src\\main\\java\\com\\aws",
+    "\\src\\main\\java\\com\\aws\\codestar",
+    "\\src\\main\\java\\com\\aws\\codestar\\projecttemplates",
+    "\\src\\main\\java\\com\\aws\\codestar\\projecttemplates\\handler"
+  ],
+  "SelectedNode": "\\template.yml",
+  "PreviewInSolutionExplorer": false
+}
