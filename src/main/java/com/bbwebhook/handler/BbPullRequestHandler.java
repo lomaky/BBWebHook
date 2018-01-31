@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.bbwebhook.GatewayResponse;
 import com.bbwebhook.models.BBWebHookData;
+import com.bbwebhook.models.v2.BBPREvent;
 import com.google.gson.Gson;
 
 /**
@@ -23,6 +24,10 @@ public class BbPullRequestHandler implements RequestHandler<Object, Object> {
     public Object handleRequest(Object input, Context context) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
+        boolean fail1 = false;
+        boolean fail2 = false;
+        String error1 = "";
+        String error2 = "";
 		try {
 			HashMap<String, String> mapInput = (HashMap<String, String>) input;
 			String body = mapInput.get("body");
@@ -39,11 +44,34 @@ public class BbPullRequestHandler implements RequestHandler<Object, Object> {
 			return new GatewayResponse(
 	        		"{ \"Output\": \""+bbWebHookData.getPullrequest().getTitle()+"\"}",
 	        		headers, 200);
-		}catch (Exception e) {
+		}catch (Exception e) { fail1 = true; error1 = e.getMessage(); }
+		
+		try {
+			HashMap<String, String> mapInput = (HashMap<String, String>) input;
+			String body = mapInput.get("body");
+			Gson g = new Gson(); 
+			BBPREvent bbPREvent = g.fromJson(body, BBPREvent.class);
+			
+			AmazonSNS sns = AmazonSNSClient.builder().withRegion("us-east-1")
+					.build();
+			sns.publish(
+					new PublishRequest("arn:aws:sns:us-east-1:257530247365:GSBBAlarm",
+						body, 
+						bbPREvent.getPullRequest().getTitle())
+					);
 			return new GatewayResponse(
-	        		"{ \"Output FAIL\": \""+e.getMessage()+"\"}",
+	        		"{ \"Output\": \""+bbPREvent.getPullRequest().getTitle()+"\"}",
+	        		headers, 200);
+		}catch (Exception e) { fail2 = true; error2 = e.getMessage(); }
+		
+		if (fail1 && fail2) {
+			return new GatewayResponse(
+	        		"{ \"Output FAIL\": \"e1:"+error1+" | e2:"+error2+"\"}",
 	        		headers, 400);
 		}
+		return new GatewayResponse(
+        		"{ \"Output FAIL\": \"Unknown Error\"}",
+        		headers, 400);
     }
 
 }
