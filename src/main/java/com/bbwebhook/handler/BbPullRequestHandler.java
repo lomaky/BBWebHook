@@ -56,11 +56,11 @@ public class BbPullRequestHandler implements RequestHandler<Object, Object> {
 					.build();
 			sns.publish(
 					new PublishRequest("arn:aws:sns:us-east-1:257530247365:GSBBAlarm",
-						body, 
-						bbPREvent.getPullRequest().getTitle())
+						body,
+						bbPREvent.getActor().getName())
 					);
 			return new GatewayResponse(
-	        		"{ \"Output\": \""+bbPREvent.getPullRequest().getTitle()+"\"}",
+	        		"{ \"Output\": \""+bbPREvent.getActor().getName()+"\"}",
 	        		headers, 200);
 		}catch (Exception e) { fail2 = true; error2 = e.getMessage(); }
 		
