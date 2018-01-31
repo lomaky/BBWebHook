@@ -29,10 +29,10 @@ public class PullRequest implements Serializable
     private Boolean closed;
     @SerializedName("createdDate")
     @Expose
-    private Integer createdDate;
+    private long createdDate;
     @SerializedName("updatedDate")
     @Expose
-    private Integer updatedDate;
+    private long updatedDate;
     @SerializedName("fromRef")
     @Expose
     private FromRef fromRef;
@@ -104,19 +104,19 @@ public class PullRequest implements Serializable
         this.closed = closed;
     }
 
-    public Integer getCreatedDate() {
+    public long getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Integer createdDate) {
+    public void setCreatedDate(long createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Integer getUpdatedDate() {
+    public long getUpdatedDate() {
         return updatedDate;
     }
 
-    public void setUpdatedDate(Integer updatedDate) {
+    public void setUpdatedDate(long updatedDate) {
         this.updatedDate = updatedDate;
     }
 
